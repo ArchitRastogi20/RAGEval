@@ -43,7 +43,8 @@ job_list = [
 
 def generate_article(model_name, data, idx=0):
     system_prompt = "You are an expert in report writing, who will carefully read the client's requirements for you and execute them to the letter."
-    user_prompt = ""
+    # ensure Italian output
+    user_prompt = "Per favore rispondi esclusivamente in italiano.\n"
     user_prompt += json.dumps(data["Company Information"], ensure_ascii=False, indent=1)
     user_prompt += (
         "\n\nPlease introduce the company's basic information in one sentence based on the JSON provided above.\n"

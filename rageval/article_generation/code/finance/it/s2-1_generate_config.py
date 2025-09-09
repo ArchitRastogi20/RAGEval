@@ -126,7 +126,9 @@ def generate_article(
     else:
         client = OpenAI(api_key=openai_api_key)
     system_prompt = "You are an expert in fabricating financial information, crafting it so seamlessly that it convinces others of its authenticity."
-    user_prompt = "Below is a structured schema that you need to use as a guide to create a very real and complete set of financial information for a company.\n"
+    # ensure Italian output and strict JSON format
+    user_prompt = "Per favore rispondi esclusivamente in italiano e fornisci un JSON valido con doppi apici per chiavi e stringhe, senza testo aggiuntivo.\n"
+    user_prompt += "Below is a structured schema that you need to use as a guide to create a very real and complete set of financial information for a company.\n"
     user_prompt += f"- Industry of the company: {job_name}"
     user_prompt += """
 - The value of each field in the structured information is an interpretative statement to help you understand; you need to fill these fields with specific events/data (like filling in the blanks) to generate a complete financial record for a company.

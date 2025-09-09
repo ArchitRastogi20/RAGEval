@@ -44,7 +44,9 @@ job_list = [
 
 def generate_article(model_name, data, idx=0):
     system_prompt = "You are a professional report writing expert."
-    user_prompt = f"""Below is a JSON containing a company's information. Based on this data, please create an outline for a {data['Report Type']} report. The key points to note are as follows:
+    # ensure Italian output
+    user_prompt = "Per favore rispondi esclusivamente in italiano.\n"
+    user_prompt += f"""Below is a JSON containing a company's information. Based on this data, please create an outline for a {data['Report Type']} report. The key points to note are as follows:
     """
     user_prompt += "- Please reflect the impacts of various events and indicators.\n"
     user_prompt += "- Each paragraph should be complete, **do not be overly concise**.\n"

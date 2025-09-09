@@ -73,6 +73,8 @@ Please return a list of sub-events in the following format, ensuring each field 
 Only supplement sub-events that are most directly related to the given important event, and avoid adding overly broad or irrelevant sub-events (such as "company establishment").
 """
     )
+    # ensure Italian output and strict JSON format
+    instruct_prompt = "Per favore rispondi esclusivamente in italiano e fornisci un JSON valido con doppi apici per chiavi e stringhe, senza testo aggiuntivo.\n" + instruct_prompt
     if base_url != '':
         client = OpenAI(api_key=openai_api_key, base_url=base_url)
     else:

@@ -44,7 +44,8 @@ job_list = [
 
 def generate_article(model_name, data, idx=0):
     system_prompt = "You are an expert in report writing, who will carefully read the client's requirements for you and execute them to the letter."
-    user_prompt = ""
+    # ensure Italian output
+    user_prompt = "Per favore rispondi esclusivamente in italiano.\n"
     user_prompt += data["Generated Outline"]
     user_prompt += f"""
 
