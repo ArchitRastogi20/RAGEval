@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Parameters
-MODEL_NAME="gpt-4o"  # Name of the OpenAI model to use
+model_name="gpt-5-mini-2025-08-07"  # Name of the OpenAI model to use
 DOMAIN="finance"     # Domain for the input data (e.g., finance, law, medical etc.)
 LANGUAGE="zh"        # Language for the input data (e.g., zh for Chinese, en for English, etc.)
 INPUT_DIR="data/${DOMAIN}/${LANGUAGE}/config"  # Directory containing input JSON files

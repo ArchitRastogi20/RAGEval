@@ -113,7 +113,7 @@ def no_value_check(response):
     return False
 
 def generate_article(
-    model_name="gpt-3.5-turbo",
+    model_name="gpt-5-mini-2025-08-07",
     job_name="IT",
     mode="new",
     data_for_complete=None,
@@ -164,6 +164,9 @@ def generate_article(
             response = response[response.find("{") : response.rfind("}") + 1]
             response = json.loads(response)
             sort_event_by_time(response["Report Content"])
+            # ensure Report Type field is preserved even if model omits it
+            if "Report Type" not in response:
+                response["Report Type"] = data_for_complete.get("Report Type")
             break
         except Exception as e:
             print(f"Error occurred: {e}. Retrying...")

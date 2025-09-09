@@ -112,7 +112,7 @@ def no_value_check(response):
 
 
 def generate_article(
-    model_name="gpt-3.5-turbo",
+    model_name="gpt-5-mini-2025-08-07",
     job_name="IT",
     mode="new",
     data_for_complete=None,

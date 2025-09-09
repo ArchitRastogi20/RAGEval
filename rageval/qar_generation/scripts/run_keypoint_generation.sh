@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Parameters
-MODEL_NAME="gpt-4o" # Name of the OpenAI model to use
+model_name="gpt-5-mini-2025-08-07" # Name of the OpenAI model to use
 INPUT_FILE_PATH="results/DRAGONBALL_Datasets/DRAGONBALL_queries.jsonl" # Directory containing input JSON files
 OUTPUT_FILE_PATH="results/DRAGONBALL_Datasets/DRAGONBALL_queries.jsonl" # Directory to save the QRA output
 
