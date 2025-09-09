@@ -2,6 +2,7 @@ from concurrent.futures import ProcessPoolExecutor
 import os
 import sys
 import json
+import re
 from openai import OpenAI
 from dotenv import load_dotenv
 import random
@@ -49,7 +50,10 @@ def generate_article(model_name, original_data, event_num=1):
         "Report Time": original_data["Report Time"],
         "Company Information": original_data["Company Information"],
     }
-    system_prompt = "You are an expert in fabricating financial information, crafting it so seamlessly that it convinces others of its authenticity."
+    system_prompt = (
+        "You are an expert in fabricating financial information, crafting it so seamlessly that it convinces others of its authenticity. "
+        "Rispondi esclusivamente in italiano fornendo un JSON valido, con doppie virgolette per chiavi e stringhe e nessuna virgola finale in oggetti o array."
+    )
     instruct_prompt = (
         f"""Based on the provided important event information regarding {sub_data['Company Information']['Name']}, """
         + """please appropriately supplement the specific preceding sub-events that are directly related to the important event. You are required to list each preceding sub-event in detail. These sub-events should be **occurrences or decisions that happened in the same year as the report**, leading directly to the occurrence of the important event, and should be arranged in chronological order from earliest to latest. Ensure each sub-event includes complete information, formatted in the same structure as the important event.
@@ -90,15 +94,20 @@ Only supplement sub-events that are most directly related to the given important
         user_prompt = instruct_prompt + json_str
         while True:
             try:
-                response = client.chat.completions.create(
+                raw = client.chat.completions.create(
                     model=model_name,
                     messages=[
                         {"role": "system", "content": system_prompt},
                         {"role": "user", "content": user_prompt}
                     ]
                 ).choices[0].message.content
-                response = response[response.find("[") : response.rfind("]") + 1]
-                response = json.loads(response)
+                response_str = raw[raw.find("[") : raw.rfind("]") + 1]
+                try:
+                    response = json.loads(response_str)
+                except json.JSONDecodeError:
+                    # remove trailing commas to salvage valid JSON
+                    cleaned = re.sub(r',\s*([}\]])', r'\1', response_str)
+                    response = json.loads(cleaned)
                 break
             except Exception as e:
                 print(f"Error occurred: {e}. Retrying...")

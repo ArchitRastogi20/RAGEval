@@ -1,6 +1,7 @@
 import sys
 import os
 import json
+import re
 from openai import OpenAI
 import random
 import argparse
@@ -125,7 +126,10 @@ def generate_article(
         client = OpenAI(api_key=openai_api_key, base_url=base_url)
     else:
         client = OpenAI(api_key=openai_api_key)
-    system_prompt = "You are an expert in fabricating financial information, crafting it so seamlessly that it convinces others of its authenticity."
+    system_prompt = (
+        "You are an expert in fabricating financial information, crafting it so seamlessly that it convinces others of its authenticity. "
+        "Rispondi esclusivamente in italiano fornendo un JSON valido, con doppie virgolette per chiavi e stringhe e nessuna virgola finale in oggetti o array."
+    )
     # ensure Italian output and strict JSON format
     user_prompt = "Per favore rispondi esclusivamente in italiano e fornisci un JSON valido con doppi apici per chiavi e stringhe, senza testo aggiuntivo.\n"
     user_prompt += "Below is a structured schema that you need to use as a guide to create a very real and complete set of financial information for a company.\n"
@@ -156,15 +160,20 @@ def generate_article(
 
     while True:
         try:
-            response = client.chat.completions.create(
+            raw = client.chat.completions.create(
                 model=model_name,
                 messages=[
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": user_prompt}
                 ]
             ).choices[0].message.content
-            response = response[response.find("{") : response.rfind("}") + 1]
-            response = json.loads(response)
+            response_str = raw[raw.find("{") : raw.rfind("}") + 1]
+            try:
+                response = json.loads(response_str)
+            except json.JSONDecodeError:
+                # remove trailing commas to salvage valid JSON
+                cleaned = re.sub(r',\s*([}\]])', r'\1', response_str)
+                response = json.loads(cleaned)
             sort_event_by_time(response["Report Content"])
             # ensure Report Type field is preserved even if model omits it
             if "Report Type" not in response:
