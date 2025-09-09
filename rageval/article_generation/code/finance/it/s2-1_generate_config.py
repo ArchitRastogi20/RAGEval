@@ -50,6 +50,13 @@ season_month_dict = {
     "Q4": [10, 11, 12],
 }
 month_list = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+# Mapping of English and Italian month names to month numbers
+italian_month_map = {
+    'gennaio': 1, 'febbraio': 2, 'marzo': 3, 'aprile': 4, 'maggio': 5, 'giugno': 6,
+    'luglio': 7, 'agosto': 8, 'settembre': 9, 'ottobre': 10, 'novembre': 11, 'dicembre': 12,
+}
+english_month_map = {m.lower(): idx + 1 for idx, m in enumerate(month_list)}
+month_map = {**english_month_map, **italian_month_map}
 
 
 def sample_month(month_list, event_len):
@@ -60,9 +67,22 @@ def sample_month(month_list, event_len):
 
 
 def sort_event_by_time(report_contents):
+    # Sort events by their Time field, supporting English and Italian month names
     for item in report_contents:
         for event in item["Significant Events"]:
-            event["Time OBJ"] = datetime.strptime(event["Time"], "%B, %Y")
+            t = event.get("Time", "").strip()
+            # split month and year (comma or space separated)
+            parts = [p.strip() for p in re.split(r"[,\s]+", t) if p.strip()]
+            if len(parts) >= 2 and parts[-1].isdigit():
+                month_name = parts[0].lower()
+                year = int(parts[-1])
+                month_num = month_map.get(month_name)
+                if not month_num:
+                    raise ValueError(f"Unrecognized month name: {month_name}")
+                event["Time OBJ"] = datetime(year, month_num, 1)
+            else:
+                # fallback to direct parse for flexibility
+                event["Time OBJ"] = datetime.strptime(t, "%B, %Y")
         item["Significant Events"].sort(key=lambda x: x["Time OBJ"])
         for event in item["Significant Events"]:
             del event["Time OBJ"]
