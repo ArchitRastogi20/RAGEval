@@ -1,4 +1,4 @@
-json_idx=2
+json_idx=1
 event_num=1
 schema_dir=./output/finance/en/schema
 config_output_dir=./output/finance/it/config
