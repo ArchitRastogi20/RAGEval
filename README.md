@@ -32,7 +32,7 @@ RAGEval is a novel framework designed for automatically generating evaluation da
 
 4. 📊 **Novel Evaluation Metrics**: Introduces three new metrics - Completeness, Hallucination, and Irrelevance - for a more thorough assessment of RAG model responses.
 
-5. 🌐 **Multi-Domain Support**: Covers various domains including finance, legal, and medical sectors in both Chinese and English languages.
+5. 🌐 **Multi-Domain Support**: Covers various domains including finance, legal, and medical sectors in Chinese, English, and Italian languages.
 
 ## Components
 

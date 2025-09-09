@@ -1,12 +1,12 @@
 # RAG Document Generation Pipeline
 
-This pipeline is designed to generate Documents based on configuration files. It supports multiple domains and languages, providing scripts for specific domain handling.
+This pipeline is designed to generate Documents based on configuration files. It supports multiple domains and languages (en, zh, it), providing scripts for specific domain handling.
 
 ## Setup and Usage
 
 ### 1. Navigate to the `article_generation` Folder
 
-Change your current directory to the `artical_generation` folder by running:
+Change your current directory to the `article_generation` folder by running:
 
 ```bash
 cd rageval/artical_generation
